@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<link rel="icon" type="image/png" href="icon-192x192.png">
+<link rel="stylesheet" href="styles.css">
+<title>Plon</title>
+</head>
+<body>
+<div class="animate-bottom">
+	<h1 id="index">Plon</h1>
+</div>
+<div class="container animate-bottom" id="index">
+	{{range .Alltasks}}
+	<div>
+		{{.}} <a href="/plon/view/{{.}}">Więcej</a> <a href="/plon/edit/{{.}}">Edytuj</a>
+	</div>
+	{{end}}
+	<a href="/plon/add">Dodaj nowe</a>
+</div>
+</body>
+</html>
