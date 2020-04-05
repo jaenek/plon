@@ -8,19 +8,20 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+type User struct {
+	Tasks []string
+}
+
 type Task struct {
-	Id      int
+	Title   string
 	Path    string
 	Created time.Time
 	Due     time.Time
 }
 
-type User struct {
-	Tasks map[string]Task
-}
-
 type Database struct {
 	Users map[string]User
+	Tasks map[string]Task
 }
 
 func ReadDatabase(path string) (*Database, error) {

@@ -7,9 +7,17 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type Page struct {
-	Name     string
-	Alltasks []string
+type IndexPage struct {
+	Alltasks []struct {
+		Id    string
+		Title string
+	}
+}
+
+type ViewPage struct {
+	Id    string
+	Title string
+	Task  string
 }
 
 func RenderTemplate(w http.ResponseWriter, tmpl string, p interface{}) error {

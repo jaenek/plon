@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	http.HandleFunc("/plon/view/", ViewHandler)
 	http.HandleFunc("/plon/", IndexHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
