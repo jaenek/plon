@@ -20,6 +20,11 @@ type ViewPage struct {
 	Task  string
 }
 
+type AddPage struct {
+	Id        string
+	Usernames []string
+}
+
 // Render template from filepath using passed data.
 func RenderTemplate(w http.ResponseWriter, tmpl string, p interface{}) error {
 	log.WithFields(log.Fields{

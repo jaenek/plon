@@ -25,23 +25,22 @@ type Database struct {
 }
 
 // Read database from json file.
-func ReadDatabase(path string) (*Database, error) {
+func (db *Database) Read(path string) error {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	log.WithFields(log.Fields{
 		"file": path,
 	}).Info("Unmarshalling json.")
 
-	db := &Database{}
 	err = json.Unmarshal(b, db)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	return nil
 }
 
 // Write database to json file.
