@@ -24,6 +24,7 @@ type Database struct {
 	Tasks map[string]Task
 }
 
+// Read database from json file.
 func ReadDatabase(path string) (*Database, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -43,6 +44,7 @@ func ReadDatabase(path string) (*Database, error) {
 	return db, nil
 }
 
+// Write database to json file.
 func (db *Database) Write() error {
 	b, err := json.MarshalIndent(db, "", "\t")
 	if err != nil {

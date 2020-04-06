@@ -8,14 +8,22 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Declare valid "filepaths":
+// - /plon/
+// - /plon/styles.css
+// - /plon/icon-192x192.png
 var validFilePath = regexp.MustCompile(
 	"^/plon/(styles.css|icon-192x192.png)?$",
 )
 
+// Declare valid paths to view/edit tasks:
+// - /plon/view/<task id>
+// - /plon/edit/<task id>
 var validIdPath = regexp.MustCompile(
 	"^/plon/(view|edit)/([a-zA-Z0-9]+)$",
 )
 
+// Get valid filepaths from url.
 func getFilename(w http.ResponseWriter, r *http.Request) (string, error) {
 	m := validFilePath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
@@ -25,6 +33,7 @@ func getFilename(w http.ResponseWriter, r *http.Request) (string, error) {
 	return m[1], nil // The file is the first subexpression.
 }
 
+// Get valid task id(string) from url.
 func getId(w http.ResponseWriter, r *http.Request) (string, error) {
 	m := validIdPath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
@@ -34,6 +43,9 @@ func getId(w http.ResponseWriter, r *http.Request) (string, error) {
 	return m[2], nil // The id is the second subexpression.
 }
 
+// Handle requests on /plon/.
+// If not requesting a file, list all tasks from database by
+// rendering the index.html template.
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	fn, err := getFilename(w, r)
 	if err != nil {
@@ -76,6 +88,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Handle requests on /plon/view/.
+// Load and print task with requested id.
 func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(w, r)
 	if err != nil {
