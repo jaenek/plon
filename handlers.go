@@ -3,7 +3,6 @@ package main
 import (
 	"io/ioutil"
 	"net/http"
-	"os"
 	"regexp"
 	"time"
 
@@ -122,47 +121,30 @@ func AddHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handle requests on /plon/save/.
 // Recieve task details through post method.
-// Create task directory and save it to file.
-// Add the task to the database and save it.
+// Save the task.
 // Redirect the user to view the task.
 func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 	if err := r.ParseForm(); err != nil {
 		return err
 	}
 
-	t := Task{
-		Title:   r.PostForm["title"][0],
-		Path:    taskPath + id + "/" + id + ".html",
-		Created: time.Now(),
+	t := &Task{
+		Title:      r.PostForm["title"][0],
+		Path:       TaskPath + id + "/" + id + ".html",
+		Addressees: r.PostForm["addressees"],
+		Created:    time.Now(),
 	}
-
-	path := taskPath + id
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		err := os.Mkdir(path, 0755)
-		if err != nil {
-			return err
-		}
-	}
-
-	task := []byte(r.PostForm["task"][0])
-	err := ioutil.WriteFile(t.Path, task, 0644)
-	if err != nil {
-		return err
-	}
-
-	for _, username := range r.PostForm["addressees"] {
-		user := DB.Users[username]
-		user.Tasks = append(DB.Users[username].Tasks, id)
-		DB.Users[username] = user
-	}
-	DB.Tasks[id] = t
-	DB.Write()
 
 	log.WithFields(log.Fields{
 		"id":         id,
 		"title":      t.Title,
-		"addressees": r.PostForm["addressees"],
+		"addressees": t.Addressees,
 	}).Info("Recieved new task.")
+
+	err := t.Save(id, r.PostForm["task"][0])
+	if err != nil {
+		return err
+	}
 
 	http.Redirect(w, r, "/plon/view/"+id, http.StatusFound)
 

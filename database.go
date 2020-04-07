@@ -3,20 +3,12 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"time"
 
 	log "github.com/sirupsen/logrus"
 )
 
 type User struct {
 	Tasks []string
-}
-
-type Task struct {
-	Title   string
-	Path    string
-	Created time.Time
-	Due     time.Time
 }
 
 type Database struct {
