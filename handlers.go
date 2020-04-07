@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"net/http"
 	"regexp"
 	"time"
@@ -128,7 +127,7 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 		return err
 	}
 
-	t := &Task{
+	t := Task{
 		Title:      r.PostForm["title"][0],
 		Path:       TaskPath + id + "/" + id + ".html",
 		Addressees: r.PostForm["addressees"],
@@ -154,7 +153,7 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 // Handle requests on /plon/view/.
 // Read task with specified id from file and render task.html template.
 func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
-	task, err := ioutil.ReadFile(DB.Tasks[id].Path)
+	task, err := DB.Tasks[id].Read()
 	if err != nil {
 		return err
 	}

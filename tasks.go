@@ -21,7 +21,7 @@ type Task struct {
 // Create task directory.
 // Save task with specified id to file.
 // Add the task to the database and save it.
-func (t *Task) Save(id string, task string) error {
+func (t Task) Save(id string, task string) error {
 	if _, err := os.Stat(path.Dir(t.Path)); os.IsNotExist(err) {
 		err := os.Mkdir(path.Dir(t.Path), 0755)
 		if err != nil {
@@ -40,8 +40,17 @@ func (t *Task) Save(id string, task string) error {
 		DB.Users[username] = user
 	}
 
-	DB.Tasks[id] = *t
+	DB.Tasks[id] = t
 	DB.Write()
 
 	return nil
+}
+
+// Read the task from file.
+func (t Task) Read() (string, error) {
+	task, err := ioutil.ReadFile(t.Path)
+	if err != nil {
+		return "", err
+	}
+	return string(task), nil
 }
