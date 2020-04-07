@@ -10,7 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// Declare directory where tasks are stored
+// Declare directory where tasks are stored.
 var taskPath = "tasks/"
 
 // Declare valid "filepaths":
@@ -105,7 +105,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 // Load username list and render the add.html page.
 func AddHandler(w http.ResponseWriter, r *http.Request) {
 	p := &AddPage{
-		Id: NewUID(), //
+		Id: NewUID(), // Create new id.
 	}
 
 	for username, _ := range DB.Users {
