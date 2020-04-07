@@ -102,20 +102,45 @@ func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 // Handle requests on /plon/add/.
 // Load username list and render the add.html page.
 func AddHandler(w http.ResponseWriter, r *http.Request) {
-	p := &AddPage{
+	p := &EditPage{
 		Id: NewUID(), // Create new id.
 	}
 
 	for username, _ := range DB.Users {
-		p.Usernames = append(p.Usernames, username)
+		p.Addressees = append(p.Addressees, username)
 	}
 
-	err := RenderTemplate(w, "add.html", p)
+	err := RenderTemplate(w, "edit.html", p)
 	if err != nil {
 		http.NotFound(w, r)
 		log.Error(err.Error())
 		return
 	}
+}
+
+// Handle requests on /plon/edit/.
+// Load the task with specified id and render the edit.html template.
+func EditHandler(w http.ResponseWriter, r *http.Request, id string) error {
+	t := DB.Tasks[id]
+
+	task, err := t.Read()
+	if err != nil {
+		return err
+	}
+
+	p := &EditPage{
+		Id:         id,
+		Title:      t.Title,
+		Task:       task,
+		Addressees: t.Addressees,
+	}
+
+	err = RenderTemplate(w, "edit.html", p)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Handle requests on /plon/save/.

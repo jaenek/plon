@@ -15,11 +15,11 @@
 	<h2 id="index">Dodaj zadanie</h2>
 	<form action="/plon/save/{{.Id}}" method="POST">
 		<label for="title">Tytuł:</label>
-		<input type="text" id="title" name="title" autocomplete="off"><br>
-		<label for="task">Zadanie:</label>
-		<textarea id="task" name="task" rows="30" cols="80" autocomplete="off"></textarea><br>
+		<input type="text" id="title" name="title" autocomplete="off" value="{{.Title}}"><br>
+		<label for="task">Zadanie:</label><br>
+		<textarea id="task" name="task" rows="30" cols="80" autocomplete="off">{{.Task}}</textarea><br>
 		<label for="addressees"></label>
-		{{range .Usernames}}<input type="checkbox" id="{{.}}" name="addressees" value="{{.}}" autocomplete="off">{{.}}<br>{{end}}
+		{{range .Addressees}}<input type="checkbox" id="{{.}}" name="addressees" value="{{.}}" autocomplete="off">{{.}}<br>{{end}}
 		<label for="due">Czas:</label>
 		<input type="datetime-local" id="due" name="due">
 		<input type="submit" value="Dodaj">

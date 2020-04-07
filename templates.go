@@ -14,15 +14,18 @@ type IndexPage struct {
 	}
 }
 
+type EditPage struct {
+	Id         string
+	Title      string
+	Task       string
+	Addressees []string
+	Due        string
+}
+
 type ViewPage struct {
 	Id    string
 	Title string
 	Task  string
-}
-
-type AddPage struct {
-	Id        string
-	Usernames []string
 }
 
 // Render template from filepath using passed data.
