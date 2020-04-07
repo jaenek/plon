@@ -18,7 +18,9 @@ type Task struct {
 	Due        time.Time
 }
 
+// Create task directory.
 // Save task with specified id to file.
+// Add the task to the database and save it.
 func (t *Task) Save(id string, task string) error {
 	if _, err := os.Stat(path.Dir(t.Path)); os.IsNotExist(err) {
 		err := os.Mkdir(path.Dir(t.Path), 0755)
