@@ -62,6 +62,18 @@ func (t Task) Delete(id string) error {
 		return err
 	}
 
+	for _, username := range t.Addressees {
+		user := DB.Users[username]
+		tasks := user.Tasks
+		for i, taskid := range tasks {
+			if taskid == id {
+				tasks[len(tasks)-1], tasks[i] = tasks[i], tasks[len(tasks)-1]
+			}
+		}
+		user.Tasks = tasks[:len(tasks)-1]
+		DB.Users[username] = user
+	}
+
 	delete(DB.Tasks, id)
 	DB.Write()
 
