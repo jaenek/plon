@@ -24,7 +24,7 @@ var validFilePath = regexp.MustCompile(
 // - /plon/edit/<task id>
 // - /plon/save/<task id>
 var validIdPath = regexp.MustCompile(
-	"^/plon/(view|edit|save)/([a-zA-Z0-9]+)$",
+	"^/plon/(view|edit|save|delete)/([a-zA-Z0-9]+)$",
 )
 
 // Get valid filepaths from url.
@@ -103,7 +103,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 // Load username list and render the add.html page.
 func AddHandler(w http.ResponseWriter, r *http.Request) {
 	p := &EditPage{
-		Id: NewUID(), // Create new id.
+		Id:        NewUID(), // Create new id.
+		Deletable: false,
 	}
 
 	for username, _ := range DB.Users {
@@ -133,6 +134,7 @@ func EditHandler(w http.ResponseWriter, r *http.Request, id string) error {
 		Title:      t.Title,
 		Task:       task,
 		Addressees: t.Addressees,
+		Deletable:  true,
 	}
 
 	err = RenderTemplate(w, "edit.html", p)
@@ -171,6 +173,19 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 	}
 
 	http.Redirect(w, r, "/plon/view/"+id, http.StatusFound)
+
+	return nil
+}
+
+// Handle requests on /plon/delete/.
+// Delte  the task with specified id and redirect to index.html.
+func DeleteHandler(w http.ResponseWriter, r *http.Request, id string) error {
+	err := DB.Tasks[id].Delete(id)
+	if err != nil {
+		return err
+	}
+
+	http.Redirect(w, r, "/plon/", http.StatusFound)
 
 	return nil
 }

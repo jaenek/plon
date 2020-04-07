@@ -54,3 +54,16 @@ func (t Task) Read() (string, error) {
 	}
 	return string(task), nil
 }
+
+// Delete the task file.
+func (t Task) Delete(id string) error {
+	err := os.RemoveAll(path.Dir(t.Path))
+	if err != nil {
+		return err
+	}
+
+	delete(DB.Tasks, id)
+	DB.Write()
+
+	return nil
+}

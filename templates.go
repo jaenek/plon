@@ -20,6 +20,7 @@ type EditPage struct {
 	Task       string
 	Addressees []string
 	Due        string
+	Deletable  bool
 }
 
 type ViewPage struct {

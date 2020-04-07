@@ -18,6 +18,7 @@ func main() {
 	http.HandleFunc("/plon/add/", AddHandler)
 	http.HandleFunc("/plon/edit/", MakeHandler(EditHandler))
 	http.HandleFunc("/plon/save/", MakeHandler(SaveHandler))
+	http.HandleFunc("/plon/delete/", MakeHandler(DeleteHandler))
 	http.HandleFunc("/plon/view/", MakeHandler(ViewHandler))
 	http.HandleFunc("/plon/", MakeIndexHandler())
 	log.Fatal(http.ListenAndServe(":8080", nil))

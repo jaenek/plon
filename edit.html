@@ -24,6 +24,11 @@
 		<input type="datetime-local" id="due" name="due">
 		<input type="submit" value="Dodaj">
 	</form>
+	{{if .Deletable}}
+	<form action="/plon/delete/{{.Id}}" method="POST">
+		<input type="submit" value="Usuń">
+	</form>
+	{{end}}
 	<a href="/plon/">Powrót</a>
 </div>
 </body>
