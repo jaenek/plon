@@ -59,7 +59,13 @@ func MakeHandler(fn func(http.ResponseWriter, *http.Request, string) error) http
 			log.Error("Invalid page id.")
 			return
 		}
-		fn(w, r, m[2]) // The id is the second subexpression.
+
+		err := fn(w, r, m[2]) // The id is the second subexpression.
+		if err != nil {
+			http.NotFound(w, r)
+			log.Error(err)
+			return
+		}
 	}
 }
 
