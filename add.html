@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<link rel="icon" type="image/png" href="icon-192x192.png">
+<link rel="stylesheet" href="/plon/styles.css">
+<title>Plon</title>
+</head>
+<body>
+<div class="animate-bottom">
+	<h1 id="index">Plon</h1>
+</div>
+<div class="container animate-bottom" id="index">
+	<h2 id="index">Dodaj zadanie</h2>
+	<form action="/plon/save/{{.Id}}" method="POST">
+		<label for="title">Tytuł:</label>
+		<input type="text" id="title" name="title" autocomplete="off"><br>
+		<label for="task">Zadanie:</label>
+		<textarea id="task" name="task" rows="30" cols="80" autocomplete="off"></textarea><br>
+		<label for="addressees"></label>
+		{{range .Usernames}}<input type="checkbox" id="{{.}}" name="addressees" value="{{.}}" autocomplete="off">{{.}}<br>{{end}}
+		<label for="due">Czas:</label>
+		<input type="datetime-local" id="due" name="due">
+		<input type="submit" value="Dodaj">
+	</form>
+	<a href="/plon/">Powrót</a>
+</div>
+</body>
+</html>
