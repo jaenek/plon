@@ -25,6 +25,7 @@ var validFilePath = regexp.MustCompile(
 // Declare valid paths to view/edit tasks:
 // - /plon/view/<task id>
 // - /plon/edit/<task id>
+// - /plon/save/<task id>
 var validIdPath = regexp.MustCompile(
 	"^/plon/(view|edit|save)/([a-zA-Z0-9]+)$",
 )
