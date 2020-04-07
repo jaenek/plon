@@ -101,28 +101,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 	return nil
 }
 
-// Handle requests on /plon/view/.
-// Read task with specified id from file and render task.html template.
-func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
-	task, err := ioutil.ReadFile(DB.Tasks[id].Path)
-	if err != nil {
-		return err
-	}
-
-	p := &ViewPage{
-		Id:    id,
-		Title: DB.Tasks[id].Title,
-		Task:  string(task),
-	}
-
-	err = RenderTemplate(w, "task.html", p)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // Handle requests on /plon/add/.
 // Load username list and render the add.html page.
 func AddHandler(w http.ResponseWriter, r *http.Request) {
@@ -187,6 +165,28 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 	}).Info("Recieved new task.")
 
 	http.Redirect(w, r, "/plon/view/"+id, http.StatusFound)
+
+	return nil
+}
+
+// Handle requests on /plon/view/.
+// Read task with specified id from file and render task.html template.
+func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
+	task, err := ioutil.ReadFile(DB.Tasks[id].Path)
+	if err != nil {
+		return err
+	}
+
+	p := &ViewPage{
+		Id:    id,
+		Title: DB.Tasks[id].Title,
+		Task:  string(task),
+	}
+
+	err = RenderTemplate(w, "task.html", p)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
