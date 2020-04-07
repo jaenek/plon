@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -31,41 +30,49 @@ var validIdPath = regexp.MustCompile(
 )
 
 // Get valid filepaths from url.
-func getFilename(w http.ResponseWriter, r *http.Request) (string, error) {
-	m := validFilePath.FindStringSubmatch(r.URL.Path)
-	if m == nil {
-		http.NotFound(w, r)
-		return "", errors.New("invalid path")
+// Return index handler for execution.
+func MakeIndexHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m := validFilePath.FindStringSubmatch(r.URL.Path)
+		if m == nil {
+			http.NotFound(w, r)
+			log.Error("Invalid path.")
+			return
+		}
+
+		err := indexHandler(w, r, m[1]) // The file is the first subexpression.
+		if err != nil {
+			http.NotFound(w, r)
+			log.Error(err)
+			return
+		}
 	}
-	return m[1], nil // The file is the first subexpression.
 }
 
 // Get valid task id(string) from url.
-func getId(w http.ResponseWriter, r *http.Request) (string, error) {
-	m := validIdPath.FindStringSubmatch(r.URL.Path)
-	if m == nil {
-		http.NotFound(w, r)
-		return "", errors.New("invalid Page Id")
+// Return apropriate handler for execution.
+func MakeHandler(fn func(http.ResponseWriter, *http.Request, string) error) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m := validIdPath.FindStringSubmatch(r.URL.Path)
+		if m == nil {
+			http.NotFound(w, r)
+			log.Error("Invalid page id.")
+			return
+		}
+		fn(w, r, m[2]) // The id is the second subexpression.
 	}
-	return m[2], nil // The id is the second subexpression.
 }
 
 // Handle requests on /plon/.
 // If not requesting a file, list all tasks from database by
 // rendering the index.html template.
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	fn, err := getFilename(w, r)
-	if err != nil {
-		log.Error(err.Error())
-		return
-	}
-
+func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 	if fn != "" {
 		http.ServeFile(w, r, fn)
 		log.WithFields(log.Fields{
 			"file": fn,
 		}).Info("Serving file.")
-		return
+		return nil
 	}
 
 	p := &IndexPage{}
@@ -80,28 +87,20 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 			})
 	}
 
-	err = RenderTemplate(w, "index.html", p)
+	err := RenderTemplate(w, "index.html", p)
 	if err != nil {
-		http.NotFound(w, r)
-		log.Error(err.Error())
-		return
+		return err
 	}
+
+	return nil
 }
 
 // Handle requests on /plon/view/.
 // Read task with specified id from file and render task.html template.
-func ViewHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := getId(w, r)
-	if err != nil {
-		log.Error(err.Error())
-		return
-	}
-
+func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
 	task, err := ioutil.ReadFile(DB.Tasks[id].Path)
 	if err != nil {
-		http.NotFound(w, r)
-		log.Error(err.Error())
-		return
+		return err
 	}
 
 	p := &ViewPage{
@@ -112,10 +111,10 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = RenderTemplate(w, "task.html", p)
 	if err != nil {
-		http.NotFound(w, r)
-		log.Error(err.Error())
-		return
+		return err
 	}
+
+	return nil
 }
 
 // Handle requests on /plon/add/.
@@ -142,17 +141,9 @@ func AddHandler(w http.ResponseWriter, r *http.Request) {
 // Create task directory and save it to file.
 // Add the task to the database and save it.
 // Redirect the user to view the task.
-func SaveHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := getId(w, r)
-	if err != nil {
-		log.Error(err.Error())
-		return
-	}
-
-	if err = r.ParseForm(); err != nil {
-		log.Error(err.Error())
-		http.NotFound(w, r)
-		return
+func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
+	if err := r.ParseForm(); err != nil {
+		return err
 	}
 
 	t := Task{
@@ -165,18 +156,14 @@ func SaveHandler(w http.ResponseWriter, r *http.Request) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err := os.Mkdir(path, 0755)
 		if err != nil {
-			log.Error(err.Error())
-			http.NotFound(w, r)
-			return
+			return err
 		}
 	}
 
 	task := []byte(r.PostForm["task"][0])
-	err = ioutil.WriteFile(t.Path, task, 0644)
+	err := ioutil.WriteFile(t.Path, task, 0644)
 	if err != nil {
-		log.Error(err.Error())
-		http.NotFound(w, r)
-		return
+		return err
 	}
 
 	for _, username := range r.PostForm["addressees"] {
@@ -194,4 +181,6 @@ func SaveHandler(w http.ResponseWriter, r *http.Request) {
 	}).Info("Recieved new task.")
 
 	http.Redirect(w, r, "/plon/view/"+id, http.StatusFound)
+
+	return nil
 }

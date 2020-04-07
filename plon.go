@@ -16,8 +16,8 @@ func main() {
 	}
 
 	http.HandleFunc("/plon/add/", AddHandler)
-	http.HandleFunc("/plon/save/", SaveHandler)
-	http.HandleFunc("/plon/view/", ViewHandler)
-	http.HandleFunc("/plon/", IndexHandler)
+	http.HandleFunc("/plon/save/", MakeHandler(SaveHandler))
+	http.HandleFunc("/plon/view/", MakeHandler(ViewHandler))
+	http.HandleFunc("/plon/", MakeIndexHandler())
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
