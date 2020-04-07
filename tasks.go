@@ -13,7 +13,7 @@ const TaskPath = "tasks/"
 type Task struct {
 	Title      string
 	Path       string
-	Addressees []string
+	Addressees map[string]bool
 	Created    time.Time
 	Due        time.Time
 }
@@ -34,10 +34,12 @@ func (t Task) Save(id string, task string) error {
 		return err
 	}
 
-	for _, username := range t.Addressees {
-		user := DB.Users[username]
-		user.Tasks = append(DB.Users[username].Tasks, id)
-		DB.Users[username] = user
+	for username := range DB.Users {
+		if t.Addressees[username] {
+			DB.Users[username].Tasks[id] = true
+		} else {
+			DB.Users[username].Tasks[id] = false
+		}
 	}
 
 	DB.Tasks[id] = t
@@ -62,16 +64,8 @@ func (t Task) Delete(id string) error {
 		return err
 	}
 
-	for _, username := range t.Addressees {
-		user := DB.Users[username]
-		tasks := user.Tasks
-		for i, taskid := range tasks {
-			if taskid == id {
-				tasks[len(tasks)-1], tasks[i] = tasks[i], tasks[len(tasks)-1]
-			}
-		}
-		user.Tasks = tasks[:len(tasks)-1]
-		DB.Users[username] = user
+	for _, user := range DB.Users {
+		delete(user.Tasks, id)
 	}
 
 	delete(DB.Tasks, id)

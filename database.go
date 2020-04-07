@@ -8,7 +8,7 @@ import (
 )
 
 type User struct {
-	Tasks []string
+	Tasks map[string]bool
 }
 
 type Database struct {

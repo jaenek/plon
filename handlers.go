@@ -108,7 +108,7 @@ func AddHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for username, _ := range DB.Users {
-		p.Addressees = append(p.Addressees, username)
+		p.Usernames = append(p.Usernames, username)
 	}
 
 	err := RenderTemplate(w, "edit.html", p)
@@ -137,6 +137,12 @@ func EditHandler(w http.ResponseWriter, r *http.Request, id string) error {
 		Deletable:  true,
 	}
 
+	for username, _ := range DB.Users {
+		if DB.Users[username].Tasks[id] != true {
+			p.Usernames = append(p.Usernames, username)
+		}
+	}
+
 	err = RenderTemplate(w, "edit.html", p)
 	if err != nil {
 		return err
@@ -154,17 +160,22 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 		return err
 	}
 
+	addressees := map[string]bool{}
+	for _, username := range r.PostForm["addressees"] {
+		addressees[username] = true
+	}
+
 	t := Task{
 		Title:      r.PostForm["title"][0],
 		Path:       TaskPath + id + "/" + id + ".html",
-		Addressees: r.PostForm["addressees"],
+		Addressees: addressees,
 		Created:    time.Now(),
 	}
 
 	log.WithFields(log.Fields{
 		"id":         id,
 		"title":      t.Title,
-		"addressees": t.Addressees,
+		"addressees": r.PostForm["addressees"],
 	}).Info("Recieved new task.")
 
 	err := t.Save(id, r.PostForm["task"][0])

@@ -19,7 +19,12 @@
 		<label for="task">Zadanie:</label><br>
 		<textarea id="task" name="task" rows="30" cols="80" autocomplete="off">{{.Task}}</textarea><br>
 		<label for="addressees"></label>
-		{{range .Addressees}}<input type="checkbox" id="{{.}}" name="addressees" value="{{.}}" autocomplete="off">{{.}}<br>{{end}}
+		{{range .Usernames}}
+		<input type="checkbox" id="{{.}}" name="addressees" value="{{.}}">{{.}}<br>
+		{{end}}
+		{{range $key, $element := .Addressees}}
+		<input type="checkbox" id="{{$key}}" name="addressees" value="{{$key}}" checked>{{$key}}<br>
+		{{end}}
 		<label for="due">Czas:</label>
 		<input type="datetime-local" id="due" name="due">
 		<input type="submit" value="Dodaj">

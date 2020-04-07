@@ -18,7 +18,8 @@ type EditPage struct {
 	Id         string
 	Title      string
 	Task       string
-	Addressees []string
+	Usernames  []string
+	Addressees map[string]bool
 	Due        string
 	Deletable  bool
 }
