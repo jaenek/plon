@@ -8,9 +8,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// Declare directory where tasks are stored.
-var taskPath = "tasks/"
-
 // Declare valid "filepaths":
 // - /plon/
 // - /plon/styles.css
