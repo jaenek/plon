@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
 	"path"
 	"time"
+
+	"github.com/russross/blackfriday/v2"
 )
 
 // Declare directory where tasks are stored.
@@ -29,7 +32,15 @@ func (t Task) Save(id string, task string) error {
 		}
 	}
 
-	err := ioutil.WriteFile(t.Path, []byte(task), 0644)
+	err := ioutil.WriteFile(t.Path+".md", []byte(task), 0644)
+	if err != nil {
+		return err
+	}
+
+	data := bytes.Replace([]byte(task), []byte("\r"), nil, -1)
+	html := blackfriday.Run(data)
+
+	err = ioutil.WriteFile(t.Path+".html", html, 0644)
 	if err != nil {
 		return err
 	}
@@ -48,9 +59,9 @@ func (t Task) Save(id string, task string) error {
 	return nil
 }
 
-// Read the task from file.
-func (t Task) Read() (string, error) {
-	task, err := ioutil.ReadFile(t.Path)
+// Read the task from file with specified extension.
+func (t Task) Read(extension string) (string, error) {
+	task, err := ioutil.ReadFile(t.Path + extension)
 	if err != nil {
 		return "", err
 	}

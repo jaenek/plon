@@ -124,7 +124,7 @@ func AddHandler(w http.ResponseWriter, r *http.Request) {
 func EditHandler(w http.ResponseWriter, r *http.Request, id string) error {
 	t := DB.Tasks[id]
 
-	task, err := t.Read()
+	task, err := t.Read(".md")
 	if err != nil {
 		return err
 	}
@@ -167,7 +167,7 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 
 	t := Task{
 		Title:      r.PostForm["title"][0],
-		Path:       TaskPath + id + "/" + id + ".html",
+		Path:       TaskPath + id + "/" + id,
 		Addressees: addressees,
 		Created:    time.Now(),
 	}
@@ -204,7 +204,7 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request, id string) error {
 // Handle requests on /plon/view/.
 // Read task with specified id from file and render task.html template.
 func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
-	task, err := DB.Tasks[id].Read()
+	task, err := DB.Tasks[id].Read(".html")
 	if err != nil {
 		return err
 	}
