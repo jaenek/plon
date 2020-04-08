@@ -7,6 +7,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Declare directory where template files are stored.
+const TemplatePath = "templates/"
+
 type IndexPage struct {
 	Alltasks []struct {
 		Id    string

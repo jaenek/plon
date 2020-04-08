@@ -91,7 +91,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 			})
 	}
 
-	err := RenderTemplate(w, "index.html", p)
+	err := RenderTemplate(w, TemplatePath+"index.html", p)
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func AddHandler(w http.ResponseWriter, r *http.Request) {
 		p.Usernames = append(p.Usernames, username)
 	}
 
-	err := RenderTemplate(w, "edit.html", p)
+	err := RenderTemplate(w, TemplatePath+"edit.html", p)
 	if err != nil {
 		http.NotFound(w, r)
 		log.Error(err.Error())
@@ -143,7 +143,7 @@ func EditHandler(w http.ResponseWriter, r *http.Request, id string) error {
 		}
 	}
 
-	err = RenderTemplate(w, "edit.html", p)
+	err = RenderTemplate(w, TemplatePath+"edit.html", p)
 	if err != nil {
 		return err
 	}
@@ -215,7 +215,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
 		Task:  string(task),
 	}
 
-	err = RenderTemplate(w, "task.html", p)
+	err = RenderTemplate(w, TemplatePath+"task.html", p)
 	if err != nil {
 		return err
 	}
