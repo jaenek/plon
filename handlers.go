@@ -8,12 +8,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Declare public directory path:
+const PublicPath = "public/"
+
 // Declare valid "filepaths":
 // - /plon/
 // - /plon/styles.css
 // - /plon/icon-192x192.png
 var validFilePath = regexp.MustCompile(
-	"^/plon/(styles.css|icon-192x192.png)?$",
+	"^/plon/(styles.css|icon-192x192.png|fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
 )
 
 // Declare valid paths to view/edit tasks:
@@ -31,7 +34,9 @@ func MakeIndexHandler() http.HandlerFunc {
 		m := validFilePath.FindStringSubmatch(r.URL.Path)
 		if m == nil {
 			http.NotFound(w, r)
-			log.Error("Invalid path.")
+			log.WithFields(log.Fields{
+				"path": r.URL.Path,
+			}).Error("Invalid path.")
 			return
 		}
 
@@ -51,7 +56,9 @@ func MakeHandler(fn func(http.ResponseWriter, *http.Request, string) error) http
 		m := validIdPath.FindStringSubmatch(r.URL.Path)
 		if m == nil {
 			http.NotFound(w, r)
-			log.Error("Invalid page id.")
+			log.WithFields(log.Fields{
+				"path": r.URL.Path,
+			}).Error("Invalid page id.")
 			return
 		}
 
@@ -69,7 +76,7 @@ func MakeHandler(fn func(http.ResponseWriter, *http.Request, string) error) http
 // rendering the index.html template.
 func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 	if fn != "" {
-		http.ServeFile(w, r, fn)
+		http.ServeFile(w, r, PublicPath+fn)
 		log.WithFields(log.Fields{
 			"file": fn,
 		}).Info("Serving file.")

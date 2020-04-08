@@ -8,33 +8,50 @@
 <title>Plon</title>
 </head>
 <body>
-<div class="animate-bottom">
-	<h1 id="index">Plon</h1>
+<div class="logo animate-top">
+	<h1 id="logo">Plon - Dodaj zadanie</h1>
 </div>
-<div class="container animate-bottom" id="index">
-	<h2 id="index">Dodaj zadanie</h2>
-	<form action="/plon/save/{{.Id}}" method="POST">
-		<label for="title">Tytuł:</label>
-		<input type="text" id="title" name="title" autocomplete="off" value="{{.Title}}"><br>
-		<label for="task">Zadanie:</label><br>
-		<textarea id="task" name="task" rows="30" cols="80" autocomplete="off">{{.Task}}</textarea><br>
-		<label for="addressees"></label>
-		{{range .Usernames}}
-		<input type="checkbox" id="{{.}}" name="addressees" value="{{.}}">{{.}}<br>
-		{{end}}
-		{{range $key, $element := .Addressees}}
-		<input type="checkbox" id="{{$key}}" name="addressees" value="{{$key}}" checked>{{$key}}<br>
-		{{end}}
-		<label for="due">Czas:</label>
-		<input type="datetime-local" id="due" name="due">
-		<input type="submit" value="Dodaj">
+<div class="animate-bottom" id="edit">
+	<form class="container" action="/plon/save/{{.Id}}" method="POST">
+		<div>
+			<label for="title">Tytuł:</label>
+			<input type="text" id="title" name="title" autocomplete="off" value="{{.Title}}">
+		</div>
+
+		<div>
+			<label for="task">Zadanie:</label><br>
+			<textarea id="task" name="task" autocomplete="off">{{.Task}}</textarea>
+		</div>
+
+		<div>
+			<label for="addressees">Osoby:</label>
+
+			{{range .Usernames}}
+			<input type="checkbox" id="{{.}}" name="addressees" value="{{.}}">
+			<label for="{{.}}">{{.}}</label>
+			{{end}}
+
+			{{range $key, $element := .Addressees}}
+			<input type="checkbox" id="{{$key}}" name="addressees" value="{{$key}}" checked>
+			<label for="{{$key}}">{{$key}}</label>
+			{{end}}
+		</div>
+
+		<div>
+			<label for="due">Czas:</label>
+			<input type="datetime-local" id="due" name="due">
+		</div>
+
+		<div id="input">
+			<input type="submit" value="Dodaj">
+			{{if .Deletable}}
+			<form action="/plon/delete/{{.Id}}" method="POST">
+				<input type="submit" value="Usuń">
+			</form>
+			{{end}}
+			<button type="button" onclick="window.location.assign('/plon/')">Powrót</button>
+		</div>
 	</form>
-	{{if .Deletable}}
-	<form action="/plon/delete/{{.Id}}" method="POST">
-		<input type="submit" value="Usuń">
-	</form>
-	{{end}}
-	<a href="/plon/">Powrót</a>
 </div>
 </body>
 </html>

@@ -8,16 +8,18 @@
 <title>Plon</title>
 </head>
 <body>
-<div class="animate-bottom">
-	<h1 id="index">Plon</h1>
+<div class="logo animate-top">
+	<h1 id="logo">Plon</h1>
 </div>
 <div class="container animate-bottom" id="index">
 	{{range .Alltasks}}
-	<div>
-		{{.Title}} <a href="/plon/view/{{.Id}}">Więcej</a> <a href="/plon/edit/{{.Id}}">Edytuj</a>
+	<div id="tasks">
+		<h1>{{.Title}}</h1>
+		<button type="button" onclick="window.location.assign('/plon/view/{{.Id}}')">Więcej</button>
+		<button type="button" onclick="window.location.assign('/plon/edit/{{.Id}}')">Edytuj</button>
 	</div>
 	{{end}}
-	<a href="/plon/add">Dodaj nowe</a>
+	<button type="button" onclick="window.location.assign('/plon/add')">Powrót</button>
 </div>
 </body>
 </html>
