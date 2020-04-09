@@ -14,12 +14,14 @@ const PublicPath = "public/"
 // Declare valid "filepaths":
 // - /plon/
 // - /plon/styles.css
+// - /plon/markdown.css
 // - /plon/icon-192x192.png
+// - /plon/fonts/<fontname>.ttf
 var validFilePath = regexp.MustCompile(
 	"^/plon/((styles|markdown).css|icon-192x192.png|fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
 )
 
-// Declare valid paths to view/edit tasks:
+// Declare valid paths to view/edit/save/delete tasks:
 // - /plon/view/<task id>
 // - /plon/edit/<task id>
 // - /plon/save/<task id>
