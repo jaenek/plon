@@ -11,8 +11,8 @@
 <div class="logo animate-top">
 	<h1 id="logo">Plon - Dodaj zadanie</h1>
 </div>
-<div class="animate-bottom" id="edit">
-	<form class="container" action="/plon/save/{{.Id}}" method="POST">
+<div class="animate-bottom">
+	<form class="container" id="edit" action="/plon/save/{{.Id}}" method="POST">
 		<div>
 			<label for="title">Tytuł:</label>
 			<input type="text" id="title" name="title" autocomplete="off" value="{{.Title}}">
@@ -41,17 +41,16 @@
 			<label for="due">Czas:</label>
 			<input type="datetime-local" id="due" name="due">
 		</div>
-
-		<div id="input">
-			<input type="submit" value="Dodaj">
-			{{if .Deletable}}
-			<form action="/plon/delete/{{.Id}}" method="POST">
-				<input type="submit" value="Usuń">
-			</form>
-			{{end}}
-			<button type="button" onclick="window.location.assign('/plon/')">Powrót</button>
-		</div>
 	</form>
+	<div class="input" id="edit">
+		<button type="button" id="add" onclick="document.getElementById('edit').submit()">Dodaj</button>
+		{{if .Deletable}}
+		<form action="/plon/delete/{{.Id}}" method="POST">
+			<input type="submit" id="delete" value="Usuń">
+		</form>
+		{{end}}
+		<button type="button" id="back" onclick="window.location.assign('/plon/')">Powrót</button>
+	</div>
 </div>
 </body>
 </html>

@@ -13,13 +13,17 @@
 </div>
 <div class="container animate-bottom" id="index">
 	{{range .Alltasks}}
-	<div id="tasks">
+	<div class="container" id="tasks">
 		<h1>{{.Title}}</h1>
-		<button type="button" onclick="window.location.assign('/plon/view/{{.Id}}')">Więcej</button>
-		<button type="button" onclick="window.location.assign('/plon/edit/{{.Id}}')">Edytuj</button>
+		<div class="input" id="index">
+			<button type="button" id="more" onclick="window.location.assign('/plon/view/{{.Id}}')">Więcej</button>
+			<button type="button" id="edit" onclick="window.location.assign('/plon/edit/{{.Id}}')">Edytuj</button>
+		</div>
 	</div>
 	{{end}}
-	<button type="button" onclick="window.location.assign('/plon/add')">Powrót</button>
+</div>
+<div class="input" id="add">
+	<button type="button" id="add" onclick="window.location.assign('/plon/add')">Dodaj</button>
 </div>
 </body>
 </html>

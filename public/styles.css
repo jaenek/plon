@@ -1,0 +1,199 @@
+@font-face {
+	font-family: "Nunito";
+	font-weight: 700;
+	src: url("/plon/fonts/Nunito-Bold.ttf")
+}
+
+@font-face {
+	font-family: "Montserrat";
+	font-weight: 400;
+	src: url("/plon/fonts/Montserrat-Regular.ttf")
+}
+
+@font-face {
+	font-family: "Montserrat";
+	font-weight: 700;
+	src: url("/plon/fonts/Montserrat-Bold.ttf")
+}
+
+@font-face {
+	font-family: "Inconsolata";
+	font-weight: 400;
+	src: url("/plon/fonts/Inconsolata-Regular.ttf")
+}
+
+body {
+	font-family: "Montserrat";
+	font-size: 18px;
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	margin: 0;
+}
+
+.logo {
+	box-shadow: 0px 0px 5px grey;
+}
+
+h1#logo {
+	font-family: "Nunito";
+	font-size: 3em;
+	height: 10vh;
+	width: 80vw;
+	line-height: 10vh;
+	margin: auto;
+}
+
+.container {
+	height: 75vh;
+	width: 70vw;
+	margin: auto;
+	margin-top: 5vh;
+	display: flex;
+	flex-flow: column;
+}
+
+.container#index, .container#task {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.container#edit {
+	justify-content: space-around;
+}
+
+.container#tasks {
+	margin: auto;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+	opacity: 0.0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: darkgray;
+}
+
+.input {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.input#index {
+	width: 32vw;
+	margin-right: 1vw;
+	align-self: flex-end;
+}
+
+.input#add, .input#edit, .input#task {
+	height: 10vh;
+	width: 70vw;
+	margin: auto;
+}
+
+.input#add, .input#task {
+	justify-content: flex-end;
+}
+
+textarea {
+	font-family: "Inconsolata";
+	font-size: 1em;
+	height: 50vh;
+	width: 98%;
+	padding: 1%;
+	resize: none;
+	border: 2px dashed;
+}
+
+input[type=text], input[type=datetime-local] {
+	font-family: "Montserrat";
+	font-size: 1em;
+	margin: 0 1vw;
+	padding: 0.25em 0.5em;
+	border: none;
+	border-bottom: 2px dashed;
+	background-color: white;
+}
+
+input[type=submit], button {
+	font-family: "Montserrat";
+	font-size: 1em;
+	height: 5vh;
+	width: 15vw;
+	border: 1px solid;
+	border-radius: 10px;
+	background-color: white;
+}
+
+button#more {
+	border-color: lightblue;
+}
+
+button#edit {
+	border-color: plum;
+}
+
+input#add, button#add {
+	border-color: lightgreen;
+}
+
+input#delete {
+	border-color: lightcoral;
+}
+
+button#more:hover {
+	background-color: lightblue;
+}
+
+button#edit:hover {
+	background-color: plum;
+}
+
+input#add:hover, button#add:hover {
+	background-color: lightgreen;
+}
+
+input#delete:hover {
+	background-color: lightcoral;
+}
+
+button#back:hover {
+	background-color: black;
+	color: white;
+}
+
+.animate-top {
+  position: relative;
+  animation-name: animatetop;
+  animation-duration: 0.5s
+}
+
+@keyframes animatetop {
+  from{ top:-100px; opacity:0 }
+  to{ top:0; opacity:1 }
+}
+
+.animate-bottom {
+  position: relative;
+  animation-name: animatebottom;
+  animation-duration: 0.5s
+}
+
+@keyframes animatebottom {
+  from{ bottom:-100px; opacity:0 }
+  to{ bottom:0; opacity:1 }
+}

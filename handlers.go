@@ -16,7 +16,7 @@ const PublicPath = "public/"
 // - /plon/styles.css
 // - /plon/icon-192x192.png
 var validFilePath = regexp.MustCompile(
-	"^/plon/(styles.css|icon-192x192.png|fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
+	"^/plon/((styles|markdown).css|icon-192x192.png|fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
 )
 
 // Declare valid paths to view/edit tasks:
