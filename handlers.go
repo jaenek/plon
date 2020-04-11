@@ -32,7 +32,7 @@ var validIdPath = regexp.MustCompile(
 
 // Declare valid user paths:
 var validUserPath = regexp.MustCompile(
-	"^/plon/(user|profile)/([a-zA-Z]+)$",
+	"^/plon/(user|profile)/([a-zA-Zęóąśłżźćń]+)$",
 )
 
 // Get valid filepaths from url.
