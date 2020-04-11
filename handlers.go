@@ -179,8 +179,12 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 	}
 
 	addressees := map[string]bool{}
-	for _, username := range r.PostForm["addressees"] {
-		addressees[username] = true
+	if len(r.PostForm["addressees"]) == 0 {
+		addressees["wszyscy"] = true
+	} else {
+		for _, username := range r.PostForm["addressees"] {
+			addressees[username] = true
+		}
 	}
 
 	t := Task{
@@ -244,8 +248,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
 // Handle requests on /plon/user/.
 // List all of specified users tasks by rendering the user.html template.
 func UserHandler(w http.ResponseWriter, r *http.Request, usernames []string) error {
-	log.Info(usernames)
-	if len(usernames) == 0 {
+	if usernames[0] != "wszyscy" {
 		usernames = append(usernames, "wszyscy")
 	}
 
