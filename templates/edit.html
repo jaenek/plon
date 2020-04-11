@@ -15,12 +15,35 @@
 	<form class="container" id="edit" action="/plon/save/{{.Id}}" method="POST">
 		<div>
 			<label for="title">Tytuł:</label>
-			<input type="text" id="title" name="title" autocomplete="off" value="{{.Title}}">
+			<input type="text" id="title" name="title" autocomplete="off" value="{{.Title}}" autofocus>
 		</div>
 
 		<div>
 			<label for="task">Zadanie:</label><br>
-			<textarea id="task" name="task" autocomplete="off">{{.Task}}</textarea>
+			<textarea id="task" name="task" autocomplete="off"
+			placeholder="# Nagłówek 1
+## Nagłówek 2
+### Nagłówek 3
+
+# Lista
+
+Zakupy:
+
+- owoce
+	- jabłka
+	- pomarańcze
+- ser żółty
+
+[linki](tytus.dom/plon)
+
+![obrazki](tytus.dom/plon/icon-192x192.png)
+
+# Tabela
+
+Imię | Wiek
+-----|------
+Ala | 20
+Bartek | 21">{{.Task}}</textarea>
 		</div>
 
 		<div>
