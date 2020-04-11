@@ -16,10 +16,12 @@ func main() {
 	}
 
 	http.HandleFunc("/plon/add/", AddHandler)
-	http.HandleFunc("/plon/edit/", MakeHandler(EditHandler))
-	http.HandleFunc("/plon/save/", MakeHandler(SaveHandler))
-	http.HandleFunc("/plon/delete/", MakeHandler(DeleteHandler))
-	http.HandleFunc("/plon/view/", MakeHandler(ViewHandler))
+	http.HandleFunc("/plon/edit/", MakeIdHandler(EditHandler))
+	http.HandleFunc("/plon/save/", MakeIdHandler(SaveHandler))
+	http.HandleFunc("/plon/delete/", MakeIdHandler(DeleteHandler))
+	http.HandleFunc("/plon/view/", MakeIdHandler(ViewHandler))
+	http.HandleFunc("/plon/user/", MakeUserHandler(UserHandler))
 	http.HandleFunc("/plon/", MakeIndexHandler())
+	http.HandleFunc("/plon", MakeIndexHandler())
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

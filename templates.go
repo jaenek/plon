@@ -10,7 +10,8 @@ import (
 // Declare directory where template files are stored.
 const TemplatePath = "templates/"
 
-type IndexPage struct {
+type UserPage struct {
+	Username string
 	Alltasks []struct {
 		Id    string
 		Title string

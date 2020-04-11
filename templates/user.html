@@ -9,13 +9,13 @@
 </head>
 <body>
 <div class="logo animate-top">
-	<h1 id="logo">Plon</h1>
+	<h1 id="logo">Plon - {{.Username}}</h1>
 </div>
-<div class="container animate-bottom" id="index">
+<div class="container animate-bottom" id="user">
 	{{range .Alltasks}}
 	<div class="container" id="tasks">
 		<h1>{{.Title}}</h1>
-		<div class="input" id="index">
+		<div class="input" id="user">
 			<button type="button" id="more" onclick="window.location.assign('/plon/view/{{.Id}}')">Więcej</button>
 			<button type="button" id="edit" onclick="window.location.assign('/plon/edit/{{.Id}}')">Edytuj</button>
 		</div>

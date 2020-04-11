@@ -55,7 +55,7 @@ h1#logo {
 	flex-flow: column;
 }
 
-.container#index, .container#task {
+.container#user, .container#task {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -93,7 +93,7 @@ h1#logo {
 	justify-content: space-around;
 }
 
-.input#index {
+.input#user {
 	width: 32vw;
 	margin-right: 1vw;
 	align-self: flex-end;

@@ -12,13 +12,14 @@ import (
 const PublicPath = "public/"
 
 // Declare valid "filepaths":
+// - /plon
 // - /plon/
 // - /plon/styles.css
 // - /plon/markdown.css
 // - /plon/icon-192x192.png
 // - /plon/fonts/<fontname>.ttf
 var validFilePath = regexp.MustCompile(
-	"^/plon/((styles|markdown).css|icon-192x192.png|fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
+	"^/plon(/|(/styles|/markdown).css|/icon-192x192.png|/fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
 )
 
 // Declare valid paths to view/edit/save/delete tasks:
@@ -27,6 +28,11 @@ var validFilePath = regexp.MustCompile(
 // - /plon/save/<task id>
 var validIdPath = regexp.MustCompile(
 	"^/plon/(view|edit|save|delete)/([a-zA-Z0-9]+)$",
+)
+
+// Declare valid user paths:
+var validUserPath = regexp.MustCompile(
+	"^/plon/(user|profile)/([a-zA-Z]+)$",
 )
 
 // Get valid filepaths from url.
@@ -53,7 +59,7 @@ func MakeIndexHandler() http.HandlerFunc {
 
 // Get valid task id(string) from url.
 // Return apropriate handler for execution.
-func MakeHandler(fn func(http.ResponseWriter, *http.Request, string) error) http.HandlerFunc {
+func MakeIdHandler(fn func(http.ResponseWriter, *http.Request, string) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		m := validIdPath.FindStringSubmatch(r.URL.Path)
 		if m == nil {
@@ -73,11 +79,32 @@ func MakeHandler(fn func(http.ResponseWriter, *http.Request, string) error) http
 	}
 }
 
-// Handle requests on /plon/.
-// If not requesting a file, list all tasks from database by
-// rendering the index.html template.
+// Get valid username from url.
+// Return apropriate handler for execution.
+func MakeUserHandler(fn func(http.ResponseWriter, *http.Request, []string) error) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m := validUserPath.FindStringSubmatch(r.URL.Path)
+		if m == nil {
+			http.NotFound(w, r)
+			log.WithFields(log.Fields{
+				"path": r.URL.Path,
+			}).Error("Invalid username.")
+			return
+		}
+
+		err := fn(w, r, m[2:]) // The username is the second subexpression.
+		if err != nil {
+			http.NotFound(w, r)
+			log.Error(err)
+			return
+		}
+	}
+}
+
+// Handle requests on /plon/user/.
+// If not requesting a file redirect to /plon/user/wszyscy
 func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
-	if fn != "" {
+	if fn != "" && fn != "/" {
 		http.ServeFile(w, r, PublicPath+fn)
 		log.WithFields(log.Fields{
 			"file": fn,
@@ -85,22 +112,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request, fn string) error {
 		return nil
 	}
 
-	p := &IndexPage{}
-	for id, _ := range DB.Tasks {
-		p.Alltasks = append(p.Alltasks,
-			struct {
-				Id    string
-				Title string
-			}{
-				Id:    id,
-				Title: DB.Tasks[id].Title,
-			})
-	}
-
-	err := RenderTemplate(w, TemplatePath+"index.html", p)
-	if err != nil {
-		return err
-	}
+	http.Redirect(w, r, "/plon/user/wszyscy", http.StatusFound)
 
 	return nil
 }
@@ -222,6 +234,40 @@ func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
 	}
 
 	err = RenderTemplate(w, TemplatePath+"task.html", p)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Handle requests on /plon/user/.
+// List all of specified users tasks by rendering the user.html template.
+func UserHandler(w http.ResponseWriter, r *http.Request, usernames []string) error {
+	log.Info(usernames)
+	if len(usernames) == 0 {
+		usernames = append(usernames, "wszyscy")
+	}
+
+	p := &UserPage{
+		Username: usernames[0],
+	}
+	for _, username := range usernames {
+		for id, _ := range DB.Users[username].Tasks {
+			if DB.Users[username].Tasks[id] {
+				p.Alltasks = append(p.Alltasks,
+					struct {
+						Id    string
+						Title string
+					}{
+						Id:    id,
+						Title: DB.Tasks[id].Title,
+					})
+			}
+		}
+	}
+
+	err := RenderTemplate(w, TemplatePath+"user.html", p)
 	if err != nil {
 		return err
 	}
