@@ -7,7 +7,7 @@ import (
 	"path"
 	"time"
 
-	"github.com/russross/blackfriday/v2"
+	gfm "github.com/shurcooL/github_flavored_markdown"
 )
 
 // Declare directory where tasks are stored.
@@ -38,7 +38,7 @@ func (t Task) Save(id string, task string) error {
 	}
 
 	data := bytes.Replace([]byte(task), []byte("\r"), nil, -1)
-	html := blackfriday.Run(data)
+	html := gfm.Markdown(data)
 
 	err = ioutil.WriteFile(t.Path+".html", html, 0644)
 	if err != nil {
