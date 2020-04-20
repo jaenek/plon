@@ -21,7 +21,7 @@ const PublicPath = "public/"
 // - /plon/icons/icon-<w>x<h>.png
 // - /plon/fonts/<fontname>.ttf
 var validFilePath = regexp.MustCompile(
-	"^/plon(/|(/styles|/markdown).css|/plon.webmanifest|/icons/(favicon|icon-[0-9]+x[0-9]+).png|/fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
+	"^/plon(/|(/styles|/markdown|/light|/dark).css|/cookies.js|/plon.webmanifest|/icons/(favicon|icon-[0-9]+x[0-9]+).png|/fonts/[a-zA-Z]+-(Bold|Regular).ttf)?$",
 )
 
 // Declare valid paths to view/edit/save/delete tasks:

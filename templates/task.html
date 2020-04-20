@@ -7,11 +7,14 @@
 <link rel="manifest" href="/plon/plon.webmanifest">
 <link rel="stylesheet" href="/plon/styles.css">
 <link rel="stylesheet" href="/plon/markdown.css">
+<link rel="stylesheet" id="theme">
+<script src="/plon/cookies.js"></script>
 <title>Plon</title>
 </head>
 <body>
 <div class="logo animate-top">
 	<h1 id="logo">Plon - {{.Title}}</h1>
+	<button id="toggle" onclick="toggleTheme()">💡</button>
 </div>
 <div class="container animate-bottom" id="task">
 	<div class="markdown-body">
