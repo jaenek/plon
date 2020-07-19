@@ -8,10 +8,11 @@ import (
 
 var DB Database
 
+// TODO(#3): Add database creation and backup.
 func main() {
 	err := DB.Read("db.json")
 	if err != nil {
-		// TODO: Create empty database and send a warning instead of fatal error.
+		// Create empty database and send a warning instead of fatal error.
 		log.Fatal(err.Error())
 	}
 
