@@ -207,6 +207,12 @@ func SaveHandler(w http.ResponseWriter, r *http.Request, id string) error {
 		return err
 	}
 
+	DB.Tasks[id] = t
+	err = WriteJSON("db.json", DB)
+	if err != nil {
+		return err
+	}
+
 	http.Redirect(w, r, "/plon/view/"+id, http.StatusFound)
 
 	return nil

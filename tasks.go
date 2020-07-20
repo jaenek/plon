@@ -53,9 +53,6 @@ func (t Task) Save(id string, task string) error {
 		}
 	}
 
-	DB.Tasks[id] = t
-	DB.Write()
-
 	return nil
 }
 
@@ -80,7 +77,7 @@ func (t Task) Delete(id string) error {
 	}
 
 	delete(DB.Tasks, id)
-	DB.Write()
+	WriteJSON("db.json", DB)
 
 	return nil
 }
