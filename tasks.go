@@ -26,7 +26,7 @@ type Task struct {
 // Add the task to the database and save it.
 func (t Task) Save(id string, task string) error {
 	if _, err := os.Stat(path.Dir(t.Path)); os.IsNotExist(err) {
-		err := os.Mkdir(path.Dir(t.Path), 0755)
+		err := os.MkdirAll(path.Dir(t.Path), 0755)
 		if err != nil {
 			return err
 		}
