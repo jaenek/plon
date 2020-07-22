@@ -30,6 +30,24 @@ type Backup struct {
 	Tasks map[string]TaskBackup
 }
 
+func CreateDatabase(path string) (Database, error) {
+	db := &Database{
+		Users: map[string]User{
+			"wszyscy": User{
+				Tasks: map[string]bool{},
+			},
+		},
+		Tasks: map[string]Task{},
+	}
+
+	err := WriteJSON(path, db)
+	if err != nil {
+		return Database{}, err
+	}
+
+	return *db, nil
+}
+
 func (db *Database) Import(path string) error {
 	b := &Backup{}
 

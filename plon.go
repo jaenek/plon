@@ -37,8 +37,12 @@ func main() {
 
 	err := ReadJSON("db.json", &DB)
 	if err != nil {
-		// Create empty database and send a warning instead of fatal error.
-		log.Fatal(err.Error())
+		log.Warn(err.Error())
+
+		DB, err = CreateDatabase("db.json")
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 	}
 
 	if export {
