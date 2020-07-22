@@ -256,10 +256,6 @@ func ViewHandler(w http.ResponseWriter, r *http.Request, id string) error {
 // Handle requests on /plon/user/.
 // List all of specified users tasks by rendering the user.html template.
 func UserHandler(w http.ResponseWriter, r *http.Request, usernames []string) error {
-	if usernames[0] != "wszyscy" {
-		usernames = append(usernames, "wszyscy")
-	}
-
 	p := &UserPage{
 		Username: usernames[0],
 	}
