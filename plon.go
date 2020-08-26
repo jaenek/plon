@@ -9,7 +9,6 @@ import (
 
 var DB Database
 
-// TODO(#3): Add database creation and backup.
 func main() {
 	var backupPath string
 	var export bool
